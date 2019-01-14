@@ -8,6 +8,17 @@ describe Oystercard do
     expect(oc.balance).to eq 0
   end
 
+  describe "#deduct" do
+
+    it { is_expected.to respond_to(:deduct).with(1).argument }
+
+    it "deducts fare from balance" do
+      oc.instance_variable_set(:@balance, 5)
+      expect { oc.deduct(2) }.to change { oc.balance }.by(-2)
+    end
+
+  end
+
   describe "#top_up" do
 
     it { is_expected.to respond_to(:top_up).with(1).argument }
@@ -18,8 +29,8 @@ describe Oystercard do
 
     it "enforces a maximum balance" do
       oc.instance_variable_set(:@balance, 1)
-      expect { oc.top_up(Oystercard::MAX) }.to raise_error "Exceeding balance limit #{Oystercard::MAX}"
+      expect { oc.top_up(Oystercard::MAX_BALANCE) }.to raise_error "Exceeding balance limit #{Oystercard::MAX_BALANCE}"
     end
-
   end
+
 end
