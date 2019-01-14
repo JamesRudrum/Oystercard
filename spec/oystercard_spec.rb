@@ -33,4 +33,12 @@ describe Oystercard do
     end
   end
 
+  describe "#in_journey?" do
+
+    it "checks if card is in use" do
+      expect(oc.in_journey?).to be false
+    end
+
+  end
+
 end
