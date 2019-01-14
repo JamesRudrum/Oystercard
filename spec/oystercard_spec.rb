@@ -17,9 +17,8 @@ describe Oystercard do
     end
 
     it "enforces a maximum balance" do
-      expect {
-        oc.top_up((Oystercard::MAX - oc.balance) + 1)
-      }.to raise_error "Exceeding balance limit"
+      oc.instance_variable_set(:@balance, 1)
+      expect { oc.top_up(Oystercard::MAX) }.to raise_error "Exceeding balance limit #{Oystercard::MAX}"
     end
 
   end
