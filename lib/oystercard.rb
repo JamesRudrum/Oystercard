@@ -1,6 +1,7 @@
 class Oystercard
 
   attr_accessor :balance
+  MAX = 90
 
   def initialize(balance = 0)
     @balance = balance
