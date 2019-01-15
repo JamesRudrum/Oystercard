@@ -19,10 +19,13 @@ class Oystercard
     @status
   end
 
-  def touch_in
-    fail "not enough money on card" if balance < MIN_FARE
-
-    @status = true
+  def touch_in(station)
+    if balance < MIN_FARE
+      fail "not enough money on card"
+    else
+      @entry_station = station
+      @status = true
+    end
   end
 
   def touch_out

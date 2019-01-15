@@ -1,7 +1,7 @@
 require "oystercard"
 
 describe Oystercard do
-  let(:oc) { Oystercard.new }
+  let(:oc){ Oystercard.new }
   # it { is_expected.to respond_to(:balance) }
 
   it "checks that when initialized balance is 0" do
@@ -26,6 +26,13 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
+    let(:station){ double :station }
+
+    it "records station that journey begins at" do
+      oc.top_up(5)
+      oc.touch_in(station)
+      expect(oc.entry_station).to eq station
+    end
 
     it "raises an error if balance is below minimum fare" do
       oc.top_up(5)
