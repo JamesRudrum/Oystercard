@@ -1,7 +1,8 @@
 require "oystercard"
 
 describe Oystercard do
-  let(:oc){ Oystercard.new }
+  let(:oc) { Oystercard.new }
+  let(:station) { double :station }
   # it { is_expected.to respond_to(:balance) }
 
   it "checks that when initialized balance is 0" do
@@ -12,21 +13,20 @@ describe Oystercard do
 
     it "changes oystercard to not be in journey" do
       oc.top_up(5)
-      oc.touch_in
+      oc.touch_in(station)
       oc.touch_out
       expect(oc.in_journey?).to be false
     end
 
     it "deducts fare from balance when user touches out" do
       oc.top_up(5)
-      oc.touch_in
+      oc.touch_in(station)
       expect { oc.touch_out }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
     end
 
   end
 
   describe "#touch_in" do
-    let(:station){ double :station }
 
     it "records station that journey begins at" do
       oc.top_up(5)
@@ -41,7 +41,7 @@ describe Oystercard do
 
     it "changes oystercard to be in journey" do
       oc.top_up(5)
-      oc.touch_in
+      oc.touch_in(station)
       expect(oc.in_journey?).to be true
     end
   end
