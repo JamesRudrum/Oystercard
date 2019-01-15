@@ -8,6 +8,16 @@ describe Oystercard do
     expect(oc.balance).to eq 0
   end
 
+  describe "#touch_in" do
+
+    it "changes oystercard to be in journey" do
+      oc.touch_in
+      expect(oc.in_journey).to eq true
+    end
+
+  end
+
+
   describe "#deduct" do
 
     it { is_expected.to respond_to(:deduct).with(1).argument }

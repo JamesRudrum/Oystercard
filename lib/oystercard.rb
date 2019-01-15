@@ -21,4 +21,7 @@ class Oystercard
     false
   end
 
+  def touch_in
+  end
+
 end
