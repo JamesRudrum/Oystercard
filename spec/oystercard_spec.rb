@@ -12,7 +12,7 @@ describe Oystercard do
 
     it "changes oystercard to be in journey" do
       oc.touch_in
-      expect(oc.in_journey).to eq true
+      expect(oc.in_journey?).to eq true
     end
 
   end
