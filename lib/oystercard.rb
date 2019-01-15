@@ -2,6 +2,7 @@ class Oystercard
 
   attr_accessor :balance
   MAX_BALANCE = 90
+  MIN_FARE = 1
 
   def initialize(balance = 0, status = false)
     @balance = balance
@@ -23,6 +24,8 @@ class Oystercard
   end
 
   def touch_in
+    fail "not enough money on card" if balance < MIN_FARE
+
     @status = true
   end
 
