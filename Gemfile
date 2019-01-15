@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 ruby "2.6.0"
 
-git_source(:github) {|repo_name| "https://github.com/JamesRudrum/Oystercard" }
+git_source(:github) { "https://github.com/JamesRudrum/Oystercard" }
 
 group :test, :development do
   gem 'rspec'

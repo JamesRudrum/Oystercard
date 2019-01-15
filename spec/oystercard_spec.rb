@@ -17,6 +17,11 @@ describe Oystercard do
       expect(oc.in_journey?).to be false
     end
 
+    it "deducts fare from balance when user touches out" do
+      oc.top_up(5)
+      oc.touch_in
+      expect { oc.touch_out }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
+    end
 
   end
 
@@ -32,20 +37,6 @@ describe Oystercard do
       oc.touch_in
       expect(oc.in_journey?).to be true
     end
-
-
-
-  end
-
-  describe "#deduct" do
-
-    it { is_expected.to respond_to(:deduct).with(1).argument }
-
-    it "deducts fare from balance" do
-      oc.instance_variable_set(:@balance, 5)
-      expect { oc.deduct(2) }.to change { oc.balance }.by(-2)
-    end
-
   end
 
   describe "#top_up" do
