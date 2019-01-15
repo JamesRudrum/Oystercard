@@ -8,6 +8,14 @@ describe Oystercard do
     expect(oc.balance).to eq 0
   end
 
+  describe "#touch_out" do
+
+    it "changes oystercard to not be in journey" do
+      oc.touch_out
+      expect(oc.in_journey?).to eq false
+    end
+  end
+
   describe "#touch_in" do
 
     it "changes oystercard to be in journey" do
@@ -16,7 +24,6 @@ describe Oystercard do
     end
 
   end
-
 
   describe "#deduct" do
 

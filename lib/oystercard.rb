@@ -26,4 +26,8 @@ class Oystercard
     @status = true
   end
 
+  def touch_out
+    @status = false
+  end
+
 end
