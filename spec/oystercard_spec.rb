@@ -11,8 +11,14 @@ describe Oystercard do
   describe "#touch_out" do
 
     it "changes oystercard to not be in journey" do
+      oc.touch_in
       oc.touch_out
-      expect(oc.in_journey?).to eq false
+      expect(oc.in_journey?).to be false
+    end
+
+    it "raises an error if balance is below minimum fare" do
+      oc.top_up(0.1)
+      expect(subject.touch_in).to raise_error if oc.balance < Oystercard::MIN_FARE
     end
   end
 
@@ -20,7 +26,7 @@ describe Oystercard do
 
     it "changes oystercard to be in journey" do
       oc.touch_in
-      expect(oc.in_journey?).to eq true
+      expect(oc.in_journey?).to be true
     end
 
   end
