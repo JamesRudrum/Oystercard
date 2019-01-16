@@ -18,7 +18,7 @@ class Oystercard
   end
 
   def in_journey?
-    !!entry_station && exit_station == nil
+    !!entry_station && exit_station.nil?
     # if @entry_station == nil
     #  false
     # else
