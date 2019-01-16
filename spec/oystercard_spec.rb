@@ -10,7 +10,18 @@ describe Oystercard do
     expect(oc.balance).to eq 0
   end
 
+  it "journeys initializes with an empty hash" do
+    expect(oc.journeys).to eq({})
+  end
+
   describe "#touch_out" do
+
+    it "adds one journey to hash when you have touched in, then touched out" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.journeys).to eq({ station1 => station2 })
+    end
 
     it "changes oystercard to not be in journey" do
       oc.top_up(5)
