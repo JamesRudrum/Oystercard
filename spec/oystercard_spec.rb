@@ -2,7 +2,8 @@ require "oystercard"
 
 describe Oystercard do
   let(:oc) { Oystercard.new }
-  let(:station) { double :station }
+  let(:station1) { double :station }
+  let(:station2) { double :station }
   # it { is_expected.to respond_to(:balance) }
 
   it "checks that when initialized balance is 0" do
@@ -13,15 +14,22 @@ describe Oystercard do
 
     it "changes oystercard to not be in journey" do
       oc.top_up(5)
-      oc.touch_in(station)
+      oc.touch_in(station1)
       oc.touch_out
       expect(oc.in_journey?).to be false
     end
 
     it "deducts fare from balance when user touches out" do
       oc.top_up(5)
-      oc.touch_in(station)
+      oc.touch_in(station1)
       expect { oc.touch_out }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
+    end
+
+    it "records station that journey ends at" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.exit_station).to eq station2
     end
 
   end
@@ -30,8 +38,8 @@ describe Oystercard do
 
     it "records station that journey begins at" do
       oc.top_up(5)
-      oc.touch_in(station)
-      expect(oc.entry_station).to eq station
+      oc.touch_in(station1)
+      expect(oc.entry_station).to eq station1
     end
 
     it "raises an error if balance is below minimum fare" do
@@ -41,7 +49,7 @@ describe Oystercard do
 
     it "changes oystercard to be in journey" do
       oc.top_up(5)
-      oc.touch_in(station)
+      oc.touch_in(station1)
       expect(oc.in_journey?).to be true
     end
   end
@@ -56,7 +64,7 @@ describe Oystercard do
 
     it "enforces a maximum balance" do
       oc.instance_variable_set(:@balance, 1)
-      expect { oc.top_up(Oystercard::MAX_BALANCE) }.to raise_error "Exceeding balance limit #{Oystercard::MAX_BALANCE}"
+      expect { oc.top_up(Oystercard::MAX_BALANCE) }.to raise_error "Max balance limit #{Oystercard::MAX_BALANCE}"
     end
   end
 

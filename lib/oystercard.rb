@@ -10,13 +10,13 @@ class Oystercard
   end
 
   def top_up(amount)
-    fail "Exceeding balance limit #{MAX_BALANCE}" if balance + amount > 90
+    fail "Max balance limit #{MAX_BALANCE}" if balance + amount > MAX_BALANCE
 
     @balance += amount
   end
 
   def in_journey?
-    @entry_station.nil? ? false : true
+    !!entry_station
     # if @entry_station == nil
     #  false
     # else
@@ -26,7 +26,7 @@ class Oystercard
 
   def touch_in(station)
     fail "not enough money on card" if balance < MIN_FARE
-    
+
     @entry_station = station
   end
 
