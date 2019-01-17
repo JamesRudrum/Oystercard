@@ -2,8 +2,8 @@ require "oystercard"
 
 describe Oystercard do
   let(:oc) { Oystercard.new }
-  let(:station1) { double :station } # touch_in(station)
-  let(:station2) { double :station } # touch_out(station)
+  let(:station1) { double :entry_station } # touch_in(station)
+  let(:station2) { double :exit_station } # touch_out(station)
   # it { is_expected.to respond_to(:balance) }
 
   it "checks that when initialized balance is 0" do
@@ -28,6 +28,13 @@ describe Oystercard do
       oc.touch_out(station2)
       expect(oc.entry_station).to be_nil
     end
+
+    it "stores the exit station" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.journeys.last[:exit_station]).to eq(station2)
+    end
   end
 
   describe "#touch_in" do
@@ -35,7 +42,7 @@ describe Oystercard do
     it "records station that journey begins at" do
       oc.top_up(5)
       oc.touch_in(station1)
-      expect(oc.entry_station).to eq station1
+      expect(oc.journeys.last[:entry_station]).to eq station1
     end
 
     it "raises an error if balance is below minimum fare" do
@@ -69,13 +76,6 @@ describe Oystercard do
       oc.touch_in(station1)
       oc.touch_out(station2)
       expect(oc.journeys[0][:entry_station]).to eq(station1)
-    end
-
-    it "stores the exit station" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.journeys[0][:exit_station]).to eq(station2)
     end
 
     it "stores entry and exit as one journey" do
