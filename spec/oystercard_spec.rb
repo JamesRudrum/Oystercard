@@ -10,10 +10,6 @@ describe Oystercard do
     expect(oc.balance).to eq 0
   end
 
-  it "journeys initializes with an empty hash" do
-    expect(oc.journeys).to eq []
-  end
-
   describe "#touch_out" do
 
     it "deducts fare from balance when user touches out" do
@@ -21,29 +17,9 @@ describe Oystercard do
       oc.touch_in(station1)
       expect { oc.touch_out(station2) }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
     end
-
-    it "forgets entry station" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.entry_station).to be_nil
-    end
-
-    it "stores the exit station" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.journeys.last[:exit_station]).to eq(station2)
-    end
   end
 
   describe "#touch_in" do
-
-    it "records station that journey begins at" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      expect(oc.journeys.last[:entry_station]).to eq station1
-    end
 
     it "raises an error if balance is below minimum fare" do
       oc.top_up(5)
@@ -65,24 +41,4 @@ describe Oystercard do
     end
   end
 
-  describe "#journey_log" do
-
-    it "has no journeys by default" do
-      expect(oc.journeys).to be_empty
-    end
-
-    it "stores the entry station" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.journeys[0][:entry_station]).to eq(station1)
-    end
-
-    it "stores entry and exit as one journey" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.journeys[0]).to include(:entry_station, :exit_station)
-    end
-  end
 end
