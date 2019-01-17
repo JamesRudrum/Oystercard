@@ -11,24 +11,10 @@ describe Oystercard do
   end
 
   it "journeys initializes with an empty hash" do
-    expect(oc.journeys).to eq({})
+    expect(oc.journeys).to eq []
   end
 
   describe "#touch_out" do
-
-    it "adds one journey to hash when you have touched in, then touched out" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.journeys).to include(station1 => station2)
-    end
-
-    it "changes oystercard to not be in journey" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      oc.touch_out(station2)
-      expect(oc.in_journey?).to be false
-    end
 
     it "deducts fare from balance when user touches out" do
       oc.top_up(5)
@@ -36,13 +22,12 @@ describe Oystercard do
       expect { oc.touch_out(station2) }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
     end
 
-    it "records station that journey ends at" do
+    it "forgets entry station" do
       oc.top_up(5)
       oc.touch_in(station1)
       oc.touch_out(station2)
-      expect(oc.exit_station).to eq station2
+      expect(oc.entry_station).to be_nil
     end
-
   end
 
   describe "#touch_in" do
@@ -56,12 +41,6 @@ describe Oystercard do
     it "raises an error if balance is below minimum fare" do
       oc.top_up(5)
       expect(subject.touch_in).to raise_error "not enough money on card" if oc.balance < Oystercard::MIN_FARE
-    end
-
-    it "changes oystercard to be in journey" do
-      oc.top_up(5)
-      oc.touch_in(station1)
-      expect(oc.in_journey?).to be true
     end
   end
 
@@ -79,12 +58,31 @@ describe Oystercard do
     end
   end
 
-  describe "#in_journey?" do
+  describe "#journey_log" do
 
-    it "checks if card is in use" do
-      expect(oc.in_journey?).to be false
+    it "has no journeys by default" do
+      expect(oc.journeys).to be_empty
     end
 
-  end
+    it "stores the entry station" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.journeys[0][:entry_station]).to eq(station1)
+    end
 
+    it "stores the exit station" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.journeys[0][:exit_station]).to eq(station2)
+    end
+
+    it "stores entry and exit as one journey" do
+      oc.top_up(5)
+      oc.touch_in(station1)
+      oc.touch_out(station2)
+      expect(oc.journeys[0]).to include(:entry_station, :exit_station)
+    end
+  end
 end
