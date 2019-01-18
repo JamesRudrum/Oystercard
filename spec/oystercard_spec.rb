@@ -15,15 +15,17 @@ describe Oystercard do
     it "deducts fare from balance when user touches out" do
       oc.top_up(5)
       oc.touch_in(station1)
-      expect { oc.touch_out(station2) }.to change { oc.balance }.by(-Oystercard::MIN_FARE)
+      expect { oc.touch_out(station2) }.to change { oc.balance }.by(-Journey::MIN_FARE)
     end
   end
 
   describe "#touch_in" do
 
+
+
     it "raises an error if balance is below minimum fare" do
       oc.top_up(5)
-      expect(subject.touch_in).to raise_error "not enough money on card" if oc.balance < Oystercard::MIN_FARE
+      expect(subject.touch_in).to raise_error "not enough money on card" if oc.balance < Journey::MIN_FARE
     end
   end
 
@@ -39,6 +41,8 @@ describe Oystercard do
       oc.instance_variable_set(:@balance, 1)
       expect { oc.top_up(Oystercard::MAX_BALANCE) }.to raise_error "Max balance limit #{Oystercard::MAX_BALANCE}"
     end
+
+
   end
 
 end

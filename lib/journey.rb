@@ -2,6 +2,9 @@ class Journey
 
   attr_reader :journeys
 
+  MIN_FARE = 1
+  PEN_FARE = 6
+
   def initialize
     @journeys = []
   end
@@ -11,7 +14,13 @@ class Journey
   end
 
   def log_exit(exit_station)
-    @journeys.last[:exit_station] = exit_station
+    if @journeys.empty?
+      @journeys << journey_log(nil, exit_station)
+    elsif @journeys.last[:exit_station] == nil
+      @journeys.last[:exit_station] = exit_station
+    else
+      @journeys << journey_log(nil, exit_station)
+    end
   end
 
   def journey_log(entry_station, exit_station)
@@ -19,6 +28,14 @@ class Journey
       entry_station: entry_station,
       exit_station: exit_station
     }
+  end
+
+  def fare
+    if @journeys.last[:entry_station] == nil
+      PEN_FARE
+    else
+      MIN_FARE
+    end
   end
 
 end

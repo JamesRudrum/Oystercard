@@ -5,8 +5,27 @@ RSpec.describe Journey do
   let(:entry_station) { double :entry_station }
   let(:exit_station) { double :exit_station }
 
+it "creates an new journey with entry point nil if double touch out" do
+  journey.log_entry(entry_station)
+  journey.log_exit(exit_station)
+  journey.log_exit(exit_station)
+  expect{journey.log_exit(entry_station)}.to change {journey.journeys.length}.by(1)
+end
+
+  it "charges penalty fair when touching out if havent touched in" do
+    journey.log_entry(entry_station)
+    journey.log_exit(exit_station)
+    journey.log_exit(exit_station)
+    expect(journey.fare).to eq Journey::PEN_FARE
+  end
+
+it "charges penalty fair when touching out if havent touched in with zero travel history" do
+  journey.log_exit(exit_station)
+  expect(journey.fare).to eq Journey::PEN_FARE
+end
+
   it "logs entry" do
-    journey.log_entry(exit_station)
+    journey.log_entry(entry_station)
     expect(@journeys).not_to eq []
   end
 
